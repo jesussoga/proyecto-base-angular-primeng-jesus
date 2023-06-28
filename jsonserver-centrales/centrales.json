@@ -334,6 +334,62 @@
       "correo": "visor@empresa.com",
       "clave": "123456",
       "admin": false
+    },
+    {
+      "nombre": "jesus",
+      "correo": "jesus@gmail.com",
+      "clave": "123456",
+      "rol": {
+        "id": 2,
+        "rol": "usuario"
+      },
+      "id": 8
+    },
+    {
+      "nombre": "Antonio",
+      "correo": "antonio@gmail.com",
+      "clave": "antonio1245.",
+      "rol": "",
+      "id": 9
+    },
+    {
+      "nombre": "perico",
+      "correo": "perico@gmail.com",
+      "clave": "as7852",
+      "rol": {
+        "id": 3,
+        "rol": "visor"
+      },
+      "id": 10
+    },
+    {
+      "nombre": "pepe",
+      "correo": "pepe@gmail.com",
+      "clave": "asdfasd",
+      "rol": {
+        "id": 2,
+        "rol": "usuario"
+      },
+      "id": 11
+    },
+    {
+      "nombre": "diego",
+      "correo": "diego@gmail.com",
+      "clave": "1478953.A676kjk",
+      "rol": "",
+      "admin": false,
+      "id": 12
+    },
+    {
+      "nombre": "moyano",
+      "correo": "moyano@gmail.com",
+      "clave": "6a45646546",
+      "rol": {
+        "id": 1,
+        "rol": "administrador"
+      },
+      "admin": true,
+      "id": 13
     }
   ],
   "centrales": [
