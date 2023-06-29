@@ -52,7 +52,7 @@
       <td>
         <div class="flex justify-content-center flex-wrap gap-3 mb-4">
           <p-button [loading]="borrandoUsuario" (click)="confirmarBorrar(usuario, $event)" icon="pi pi-trash" styleClass="p-button-rounded p-button-danger"></p-button>
-          <p-button  icon="pi pi-pencil" styleClass="p-button-rounded p-button-secondary"></p-button>
+          <p-button (click)="mostrarDialogoUsuario(usuario)" icon="pi pi-pencil" styleClass="p-button-rounded p-button-secondary"></p-button>
         </div>
       </td>
       </tr>
@@ -70,7 +70,7 @@
     [(visible)]="dialogoNuevoUsuarioVisible"
     [modal]="true"
     [maximizable]="true"
-    header="Nuevo Usuario"
+    [header]="estoyEditando ? 'Editar usuario' : 'Nuevo Usuario'"
   >
     <form [formGroup]="formUsuario" class="mt-4" (ngSubmit)="validarFormulario()">
       <div class="formgrid grid">
@@ -103,7 +103,7 @@
               [toggleMask]="true"
               formControlName="clave">
                <ng-template pTemplate="footer" >
-                   <p class="mt-2">Sugerencias</p>
+                   <p class="mt-2">Requisitos</p>
                    <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
                        <li>Al menos una minúscula</li>
                        <li>Al menos una mayúscula</li>
@@ -120,7 +120,12 @@
         </div>
 
       </div>
-      <div class="flex justify-content-end">
+      <div class="flex justify-content-end mb-2 p-3 gap-3">
+        <p-button
+          icon="pi pi-eye"
+          label="Verificar"
+          (click)="marcarTodosLosCampos()"
+        ></p-button>
         <p-button
           icon="pi pi-save"
           label="Guardar"
@@ -131,7 +136,7 @@
         ></p-button>
       </div>
     </form>
-    <div class="p-message p-message-info">
+     <div *ngIf="ocultarPruebasDesarrolo" class="p-message p-message-info">
       <code>
         <p>Value:     {{formUsuario.value | json}}</p>
         <p>Valid:     {{formUsuario.valid}}</p>

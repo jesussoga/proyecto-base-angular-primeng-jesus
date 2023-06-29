@@ -24,10 +24,13 @@ export class PageUsuariosComponent implements OnInit{
   public cargandoUsuarios: boolean;
   public borrandoUsuario: boolean;
   public guardandoUsuario: boolean;
+  public estoyEditando: boolean;
     // Ventana de diálogo de un nuevo usuario
   public dialogoNuevoUsuarioVisible:  boolean;
   // Formulario Usuario
   public formUsuario!: FormGroup;
+  public idUsuarioEditar: number;
+  public ocultarPruebasDesarrolo: boolean;
 
   constructor(private usuarioService: UsuarioService,
               private mensajesService: MessageService,
@@ -44,6 +47,9 @@ export class PageUsuariosComponent implements OnInit{
     this.borrandoUsuario = false;
     this.guardandoUsuario= false;
     this.dialogoNuevoUsuarioVisible = false;
+    this.ocultarPruebasDesarrolo = true;
+    this.estoyEditando = false;
+    this.idUsuarioEditar = 0;
   }
 
   ngOnInit(): void {
@@ -139,8 +145,18 @@ export class PageUsuariosComponent implements OnInit{
       });
   }
 
-  public mostrarDialogoUsuario(){
-    this.formUsuario.reset(); //TODO cuando estemos editando no lo resetearemos;
+  public mostrarDialogoUsuario(usuarioEditar? : Usuario ) {
+    this.estoyEditando = usuarioEditar! != undefined;
+
+    // Guardamos la id del usuario que queramos editar, para usarla despues en el servicio.
+    if (this.estoyEditando){
+      if(usuarioEditar!.id != undefined){
+        this.idUsuarioEditar = usuarioEditar!.id;
+      }
+      this.formUsuario.reset(usuarioEditar);
+    } else {
+      this.formUsuario.reset(); //TODO cuando estemos editando no lo resetearemos;
+    }
     this.dialogoNuevoUsuarioVisible = true;
   }
   public ocultarDialogoUsuario(){
@@ -155,8 +171,13 @@ export class PageUsuariosComponent implements OnInit{
 
     // Así se eliminan atributos a un JSON..
     // delete usuario.admin
+    if(this.estoyEditando){
+      usuario = {... usuario, id: this.idUsuarioEditar}; // El rol con id 1 es administrador
 
-    this.guardarUsuarioValidado(usuario);
+      this.modificarUsuario(usuario);
+    } else {
+      this.guardarUsuarioValidado(usuario);
+    }
     this.cargarUsuarios();
   }
 
@@ -192,6 +213,32 @@ export class PageUsuariosComponent implements OnInit{
     return this.formUsuario.controls[campo].invalid && this.formUsuario.controls[campo].touched;
   }
 
+  public marcarTodosLosCampos() {
+    this.formUsuario.markAllAsTouched();
+  }
 
-
+  public modificarUsuario(usuario: Usuario) {
+    this.guardandoUsuario = true;
+    this.usuarioService.editarUsuario(usuario).subscribe(
+      {
+      next: (datos: Usuario) => {
+        this.mensajesService.add({
+          summary: "Editar",
+          detail: "Usuario actualizado correctamente",
+          severity: "success",
+        })
+      },
+      error: (error: HttpErrorResponse) => {
+        this.mensajesService.add({
+          summary: "Editar",
+          detail: `Error al editar   ${error.message}`,
+          severity: "warm"
+        });
+      },
+        complete: () => {
+          this.guardandoUsuario = false;
+          this.ocultarDialogoUsuario();
+        }
+    });
+  }
 }

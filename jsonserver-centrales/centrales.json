@@ -330,9 +330,9 @@
         "id": 3,
         "rol": "visor"
       },
-      "nombre": "Visor",
+      "nombre": "Otro usuario",
       "correo": "visor@empresa.com",
-      "clave": "123456",
+      "clave": "asdfaAa56",
       "admin": false
     },
     {
