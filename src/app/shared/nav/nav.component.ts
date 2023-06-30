@@ -21,14 +21,30 @@ export class NavComponent {
         icon: PrimeIcons.DATABASE,
         items: [
           {
+            label: "Usuarios",
+            icon: PrimeIcons.USER,
+            items: [
+              {
+                label: "Home",
+                icon: PrimeIcons.HOME,
+                routerLink: "/usuarios"
+              },
+              {
+                label: "Listado",
+                icon: PrimeIcons.LIST,
+                routerLink: "/usuarios/listados"
+              },
+              {
+                label: "Estadísticas",
+                icon: PrimeIcons.CHART_BAR,
+                routerLink: "/usuarios/estadisticas"
+              }
+            ]
+          },
+          {
             label: "Centrales",
             icon: PrimeIcons.BUILDING,
             routerLink: "/centrales"
-          },
-          {
-            label: "Usuarios",
-            icon: PrimeIcons.USER,
-            routerLink: "/usuarios"
           },
           {
             label: "Incidencias",

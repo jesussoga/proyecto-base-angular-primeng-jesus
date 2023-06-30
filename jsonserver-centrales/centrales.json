@@ -259,17 +259,6 @@
   ],
   "usuarios": [
     {
-      "id": 1,
-      "rol": {
-        "id": 1,
-        "rol": "administrador"
-      },
-      "nombre": "Jose Luis González",
-      "correo": "admin@accenture.com",
-      "clave": "654321aA",
-      "admin": true
-    },
-    {
       "id": 2,
       "rol": {
         "id": 2,

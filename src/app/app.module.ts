@@ -8,6 +8,7 @@ import { PageCentralesComponent } from './centrales/page-centrales/page-centrale
 import {UsuariosModule} from "./usuarios/usuarios.module";
 import {SharedModule} from "./shared/shared.module";
 import {CentralesModule} from "./centrales/centrales.module";
+import {UsuarioRoutingModule} from "./usuarios/usuario-routing.module";
 
 @NgModule({
   declarations: [
@@ -18,9 +19,10 @@ import {CentralesModule} from "./centrales/centrales.module";
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    UsuariosModule,
     SharedModule,
     UsuariosModule,
-    CentralesModule
+    CentralesModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
