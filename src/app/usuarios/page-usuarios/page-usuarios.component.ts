@@ -29,7 +29,6 @@ export class PageUsuariosComponent implements OnInit{
   public dialogoNuevoUsuarioVisible:  boolean;
   // Formulario Usuario
   public formUsuario!: FormGroup;
-  public idUsuarioEditar: number;
   public ocultarPruebasDesarrolo: boolean;
 
   constructor(private usuarioService: UsuarioService,
@@ -49,7 +48,6 @@ export class PageUsuariosComponent implements OnInit{
     this.dialogoNuevoUsuarioVisible = false;
     this.ocultarPruebasDesarrolo = true;
     this.estoyEditando = false;
-    this.idUsuarioEditar = 0;
   }
 
   ngOnInit(): void {
@@ -62,6 +60,7 @@ export class PageUsuariosComponent implements OnInit{
     const claveDigitoMax: number = 8;
     const regexClave: string = `^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{${claveDigitoMax},}$`;
     this.formUsuario = this.formBuilder.group({
+      id    : [0, []],
       nombre: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
       correo: ["", [Validators.required, Validators.pattern(regexEmail)]],
       clave:  ["", [Validators.required, Validators.pattern(regexClave)]],
@@ -79,7 +78,11 @@ export class PageUsuariosComponent implements OnInit{
           this.cargandoUsuarios = false;
         },
         error: (datos: HttpErrorResponse) => {
-          console.log("Error al recuperar los datos", datos);
+          this.mensajesService.add({
+            summary: "Usuarios",
+            detail: "Hubo un error al obtener los usuario. " + datos,
+            sticky: true
+          })
           this.cargandoUsuarios = false;
         }
       }
@@ -121,6 +124,7 @@ export class PageUsuariosComponent implements OnInit{
           const  mensaje: Message = {
             summary: "Borrar",
             detail: "Hubo un error al borrar. " + datos.message,
+            sticky: true,
             severity: "error"
           };
           this.borrandoUsuario = false;
@@ -150,12 +154,11 @@ export class PageUsuariosComponent implements OnInit{
 
     // Guardamos la id del usuario que queramos editar, para usarla despues en el servicio.
     if (this.estoyEditando){
-      if(usuarioEditar!.id != undefined){
-        this.idUsuarioEditar = usuarioEditar!.id;
-      }
+      //Vamos a editar un usuario existente.
       this.formUsuario.reset(usuarioEditar);
     } else {
-      this.formUsuario.reset(); //TODO cuando estemos editando no lo resetearemos;
+      // Vamos a crear un usuario nuevo.
+      this.formUsuario.reset();
     }
     this.dialogoNuevoUsuarioVisible = true;
   }
@@ -164,7 +167,6 @@ export class PageUsuariosComponent implements OnInit{
   }
 
  public validarFormulario() {
-
     let usuario: Usuario = this.formUsuario.value;
     // Así se añaden atributos a un JSON..
     usuario = {... usuario, admin: usuario.rol.id == 1}; // El rol con id 1 es administrador
@@ -172,10 +174,9 @@ export class PageUsuariosComponent implements OnInit{
     // Así se eliminan atributos a un JSON..
     // delete usuario.admin
     if(this.estoyEditando){
-      usuario = {... usuario, id: this.idUsuarioEditar}; // El rol con id 1 es administrador
-
       this.modificarUsuario(usuario);
     } else {
+      delete usuario.id; //Borramosla id, porque al ser autoicrementable no necesitamos darle una ID.
       this.guardarUsuarioValidado(usuario);
     }
     this.cargarUsuarios();
@@ -192,16 +193,17 @@ export class PageUsuariosComponent implements OnInit{
             severity: "success",
             icon: "pi pi-user-plus"
           });
+          this.guardandoUsuario = false;
+          this.ocultarDialogoUsuario();
         },
         error: (datos: HttpErrorResponse) => {
           this.mensajesService.add({
             summary: "Nuevo usuario",
             detail: "Ha habido un error " +  datos.message,
             severity: "error",
+            sticky: true,
             icon: "pi pi-user-plus"
           });
-        },
-        complete: () => {
           this.guardandoUsuario = false;
           this.ocultarDialogoUsuario();
         }
@@ -227,18 +229,19 @@ export class PageUsuariosComponent implements OnInit{
           detail: "Usuario actualizado correctamente",
           severity: "success",
         })
+        this.guardandoUsuario = false;
+        this.ocultarDialogoUsuario();
       },
       error: (error: HttpErrorResponse) => {
         this.mensajesService.add({
           summary: "Editar",
           detail: `Error al editar   ${error.message}`,
-          severity: "warm"
+          severity: "error",
+          sticky: true
         });
-      },
-        complete: () => {
-          this.guardandoUsuario = false;
-          this.ocultarDialogoUsuario();
-        }
+        this.guardandoUsuario = false;
+        this.ocultarDialogoUsuario();
+      }
     });
   }
 }

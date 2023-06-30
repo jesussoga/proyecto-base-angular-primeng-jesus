@@ -1,9 +1,6 @@
 
 
 <p-card>
-  <div *ngIf="cargandoUsuarios" class="card">
-    <p-progressBar mode="indeterminate" [style]="{'height': '7px'}"></p-progressBar>
-  </div>
   <div class="flex justify-content-end mb-2 p-3 gap-3">
     <p-button
       (click)="cargarUsuarios()"
@@ -73,6 +70,7 @@
     [header]="estoyEditando ? 'Editar usuario' : 'Nuevo Usuario'"
   >
     <form [formGroup]="formUsuario" class="mt-4" (ngSubmit)="validarFormulario()">
+      <input type="hidden" formControlName="id"/>
       <div class="formgrid grid">
         <div class="field col-12 md:col-6">
           <span class="p-float-label">
@@ -132,7 +130,7 @@
           type="submit"
           [styleClass]="formUsuario.valid ? 'p-button-success' : 'p-button-danger'"
           [loading]="guardandoUsuario"
-          [disabled]="formUsuario.invalid"
+          [disabled]="formUsuario.invalid ||formUsuario.pristine"
         ></p-button>
       </div>
     </form>

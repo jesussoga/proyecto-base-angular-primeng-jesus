@@ -266,7 +266,7 @@
       },
       "nombre": "Jose Luis González",
       "correo": "admin@accenture.com",
-      "clave": "654321",
+      "clave": "654321aA",
       "admin": true
     },
     {
@@ -390,6 +390,28 @@
       },
       "admin": true,
       "id": 13
+    },
+    {
+      "id": 14,
+      "nombre": "felipe",
+      "correo": "fl@gmail.com",
+      "clave": "125614aA.",
+      "rol": {
+        "id": 1,
+        "rol": "administrador"
+      },
+      "admin": true
+    },
+    {
+      "nombre": "nuevo total",
+      "correo": "total@gmail.com",
+      "clave": "asdfA1234.",
+      "rol": {
+        "id": 2,
+        "rol": "usuario"
+      },
+      "admin": false,
+      "id": 15
     }
   ],
   "centrales": [
